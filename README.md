@@ -5,9 +5,6 @@ Has no dependencies. At the moment works only with HMAC SHA256.
 
 ## Installation
 
-If you use npm, `npm install @onelastjedi/node-jwt`. 
-You can also download the [latest release on GitHub](https://github.com/onelastjedi/node-jwt/releases/latest). 
-
 ### Use
 
 ```js
