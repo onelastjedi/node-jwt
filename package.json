@@ -1,0 +1,33 @@
+{
+  "name": "@onelastjedi/node-jwt",
+  "version": "1.0.0",
+  "description": "Sign nad verify JSON Web Tokens in it's simplest form",
+  "homepage": "https://phon.one/node-jwt",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/onelastjedi/node-jwt.git"
+  },
+  "keywords": [
+    "JWT",
+    "Node JWT",
+    "JSON Web Token",
+    "JWT sign",
+    "JWT verify",
+    "crypto"
+  ],
+  "license": "AGPL",
+  "author": {
+    "name": "J.D",
+    "url": "https://phon.one"
+  },
+  "main": "src/index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "devDependencies": {
+    "mocha": "^10.2.0"
+  },
+  "engines": {
+    "node": ">=12"
+  }
+}
