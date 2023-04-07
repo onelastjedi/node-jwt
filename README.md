@@ -1,7 +1,7 @@
 # node-jwt
 
 JavaScript library to sign and verify JSON Web Tokens in it's simplest form. 
-Has no dependencies. Only works with HMAC SHA256. 
+Has no dependencies. At the moment works only with HMAC SHA256. 
 
 ## Installation
 
@@ -13,7 +13,7 @@ You can also download the [latest release on GitHub](https://github.com/onelastj
 ```js
 import jwt from '@onelastjedi/node-jwt'
 
-const secret= process.env.__SECRET__
+const secret = process.env.__SECRET__
 
 const data = { 
     exp: Math.floor(Date.now() / 1000) + 60 * 60,
@@ -22,13 +22,18 @@ const data = {
 
 const token = jwt.sign(data, secret) // eyJhbGc.....
 
-jwt.verify(token, secret) // {
-  alg: 'HS256',
-  typ: 'JWT',
-  user: { id: 1, name: 'Mary' },
-  iat: ...,
-  exp: ...,
-}
+jwt.verify(token, secret)
+
+/* 
+    {
+      alg: 'HS256',
+      typ: 'JWT',
+      user: { id: 1, name: 'Mary' },
+      iat: ...,
+      exp: ...,
+    }
+*/
+
 ```
 
 ### License
