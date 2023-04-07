@@ -17,10 +17,8 @@ const data = {
     user: { id: 1, name: 'Mary' }
 }
 
-const token = jwt.sign(data, secret) // eyJhbGc.....
-
+jwt.sign(data, secret) // eyJhbGc.....
 jwt.verify(token, secret)
-
 /* 
     {
       alg: 'HS256',
