@@ -1,0 +1,19 @@
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Build and public
+node_modules
+package-lock.json
+dist
+dist-ssr
+build
+public
+*.local
