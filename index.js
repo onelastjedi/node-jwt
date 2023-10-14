@@ -19,7 +19,7 @@
  * Should satisfy RFC
  * https://datatracker.ietf.org/doc/html/draft-ietf-jose-json-web-algorithms-40/
  *
- * Depends on navite crypto
+ * Depends on native crypto
  */
 var crypto = require('node:crypto')
 
@@ -35,7 +35,7 @@ var replace = (re, rep) => x => x.replace(re, rep),
 
     /* Slice */
     slice = (b, e) => str => str.slice(b, e),
-    // [AB123] -> [AB, 123]
+    // [AB123] -> [AB, 123] */
     slicer = str => [slice(0, 2)(str), slice(2)(str)],
 
     /* JSON */
@@ -57,14 +57,15 @@ var replace = (re, rep) => x => x.replace(re, rep),
   ;
 
 /* HMAC sha256 base64 signer */
-var hs_b64 = algo => secret => x => crypto
+var hs_b64 = algo => secret => x =>
+  crypto
     .createHmac(algo, secret)
     .update(x).digest('base64url')
   ;
 
 /* Signer picker */
-var getSigner = algo => {
-  var [head, tail] = slicer(algo)
+var getSigner = alg => {
+  var [head, tail] = slicer(alg)
 
   return {
     'HS': n => hs_b64('sha' + n)
@@ -77,21 +78,54 @@ var getHead = alg => encode({
     typ: 'JWT'
   })
 
-/* Sign token */
-function sign (body, secret, algo = 'HS256') {
-  var head = getHead(algo),
+/**
+ * Sign body with secret using
+ * one of supported algorithms
+ *
+ * @param {Object} body - data to sign
+ * @param {String} secret - private secret
+ * @param {String} [alg=HS256] alg - desired algorithm
+ * @returns {String} JWT token
+ *
+ * @example
+ *
+ *    sign({ foo: "bar" }, 'secret') -> eyJhbGc.....
+ *    sign({ foo: "bar" }, 'secret', 'HS512') -> eyJhbGc.....
+ */
+function sign (body, secret, alg = 'HS256') {
+
+  // REFACTOR
+  if (body.exp) {
+    body.exp = floor(divide1000(body.exp))
+  }
+
+  var head = getHead(alg),
       body = encode({ ...body, iat: now() }),
-      signer = getSigner(algo)(secret)
+      signer = getSigner(alg)(secret)
     ;
 
   return `${head}.${body}.${signer(head + '.' + body)}`
 }
 
-/* Verify token */
+/**
+ * Verify token with secret using
+ * one of supported algorithms
+ *
+ * @param {String} token - token to verify
+ * @param {String} secret - private secret
+ * @returns {Object} body
+ *
+ * @example
+ *
+ *    verify(eyJhbGc....., 'secret') -> { foo: "bar", iat: 1697265269 }
+ */
 function verify (token, secret) {
-  var signer = hs256_b64(secret),
-      [head, body, tail] = splitDot(token),
-      invalid = tail !== signer(head + '.' + body),
+  var [head, body, tail] = splitDot(token),
+      { alg } = decode(head),
+      signer = getSigner(alg)(secret)
+    ;
+
+  var invalid = tail !== signer(head + '.' + body),
       expired = decode(body).exp < Date.now() / 1000
     ;
 
@@ -99,7 +133,6 @@ function verify (token, secret) {
   if (expired) throw new Error('Token expired')
 
   return {
-    ...decode(head),
     ...decode(body)
   }
 }
