@@ -8,6 +8,8 @@
 *.njsproj
 *.sln
 *.sw?
+*.tar
+*.tar.gz
 
 # Build and public
 node_modules
