@@ -23,37 +23,41 @@
  */
 var crypto = require('node:crypto')
 
-/* Define helpers */
+/*
+ * Some usefull helpers
+ *
+ *
+ */ // replace :: Regex -> String
 var replace = (re, rep) => x => x.replace(re, rep),
     rePad = replace(/=/g, ''),
-    reUnd = replace(/_/g, '/'),
-    reMin = replace(/-/g, '+'),
 
-    /* Split */
+    // split :: String -> [String]
     split = splitter => x => x.split(splitter),
     splitDot = split('.'),
 
-    /* Slice */
+    // slice :: Number -> String
+    // slicer :: String -> [String]
     slice = (b, e) => str => str.slice(b, e),
-    // [AB123] -> [AB, 123] */
     slicer = str => [slice(0, 2)(str), slice(2)(str)],
 
-    /* JSON */
-    stringify = JSON.stringify,
-    parse = JSON.parse,
-
-    /* Encoding/decoding */
+    // encode :: a -> String
+    // decode :: String -> a
     encode = x => rePad(btoa(stringify(x))),
     decode = x => parse(atob(x)),
 
-    /* Math */
+    // divide :: Number -> Number
     divide = div => x => x / div,
     divide1000 = divide(1000),
     floor = Math.floor,
 
-    /* Date */
-    now = () => floor(divide1000(Date.now())),
-    after = x => now() + x
+    // now :: Function -> Number
+    // after :: Number -> Number
+    now = date => floor(divide1000(date.now())),
+    after = x => now(Date) + x,
+
+    /* Simple shorthands */
+    stringify = JSON.stringify,
+    parse = JSON.parse
   ;
 
 /* HMAC sha256 base64 signer */
@@ -93,14 +97,12 @@ var getHead = alg => encode({
  *    sign({ foo: "bar" }, 'secret', 'HS512') -> eyJhbGc.....
  */
 function sign (body, secret, alg = 'HS256') {
-
-  // REFACTOR
-  if (body.exp) {
-    body.exp = floor(divide1000(body.exp))
-  }
+  Object.hasOwn(body, 'exp')
+    && (body.exp = after(body.exp))
+  ;
 
   var head = getHead(alg),
-      body = encode({ ...body, iat: now() }),
+      body = encode({ ...body, iat: now(Date) }),
       signer = getSigner(alg)(secret)
     ;
 
