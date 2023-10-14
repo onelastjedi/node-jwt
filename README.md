@@ -19,7 +19,7 @@ import jwt from '@onelastjedi/node-jwt'
 const secret = process.env.__SECRET__
 
 const data = {
-  exp: Math.floor(Date.now() / 1000) + 60 * 60,
+  exp: 60 * 60 * 24 * 7, // 7 days
   user: { id: 1, name: 'Mary' }
 }
 
@@ -44,7 +44,7 @@ jwt.verify(token, secret)
 Generated JWT will include an iat (issued at) claim by default. For expiration claim (exp) simply add it to payload. Default signature is `HS256`.
 
 ```js
-const exp = Math.floor(Date.now() / 1000) + 60
+const exp = 60 * 60 * 24 * 365 // 365 days
 const token = jwt.sign({ foo: 'bar', exp: exp }, secret, 'HS384')
 ```
 
