@@ -32,8 +32,7 @@ var replace = (re, rep) => x => x.replace(re, rep),
     rePad = replace(/=/g, ''),
 
     // split :: String -> [String]
-    split = splitter => x => x.split(splitter),
-    splitDot = split('.'),
+    splitDot = x => x.split('.'),
 
     // slice :: Number -> String
     // slicer :: String -> [String]
@@ -46,13 +45,11 @@ var replace = (re, rep) => x => x.replace(re, rep),
     decode = x => parse(atob(x)),
 
     // divide :: Number -> Number
-    divide = div => x => x / div,
-    divide1000 = divide(1000),
-    floor = Math.floor,
+    divide1000 = x => x / 1000,
 
     // now :: Function -> Number
     // after :: Number -> Number
-    now = date => floor(divide1000(date.now())),
+    now = date => Math.floor(divide1000(date.now())),
     after = x => now(Date) + x,
 
     /* Simple shorthands */
@@ -128,7 +125,7 @@ function verify (token, secret) {
     ;
 
   var invalid = tail !== signer(head + '.' + body),
-      expired = decode(body).exp < Date.now() / 1000
+      expired = decode(body).exp <= now(Date)
     ;
 
   if (invalid) throw new Error('Invalid signature')
