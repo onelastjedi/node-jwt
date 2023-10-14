@@ -1,3 +1,7 @@
+![bundle size](https://img.shields.io/bundlephobia/minzip/@onelastjedi/node-jwt)
+![version](https://img.shields.io/npm/v/@onelastjedi/node-jwt)
+![downloads](https://img.shields.io/npm/dm/@onelastjedi/node-jwt)
+
 # node-jwt
 
 JavaScript library to sign and verify JSON Web Tokens in it's simplest form.
@@ -5,7 +9,7 @@ Has no dependencies.
 
 ## Installation
 
-If you use npm, `npm install @onelastjedi/json2csv`. You can also download the [latest release on GitHub](https://github.com/onelastjedi/node-jwt/releases/latest).
+If you use npm, `npm install @onelastjedi/node-jwt`. You can also download the [latest release on GitHub](https://github.com/onelastjedi/node-jwt/releases/latest).
 
 ## Use
 
