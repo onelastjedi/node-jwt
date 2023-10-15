@@ -6,6 +6,15 @@ const token = lib.sign(data, secret)
 const [head, body] = token.split('.')
 const decode = x => JSON.parse(atob(x))
 
+class TokenError extends Error {
+  constructor (s)
+    {
+      super(s)
+      this.name = this.constructor.name
+
+          }
+    }
+
 describe('Library supports:', () => {
   const hs256 = lib.sign(data, secret, 'HS256')
   const hs384 = lib.sign(data, secret, 'HS384')
@@ -68,11 +77,11 @@ describe('Library is a object which exports:', () => {
       const exp = () => lib.verify(expired, secret)
 
       it('for invalid signature', () =>
-        assert.throws(invalid, new Error('Invalid signature')))
+        assert.throws(invalid, new TokenError('Invalid signature')))
 
 
       it('for expired token', () =>
-        assert.throws(exp, new Error('Token expired')))
+        assert.throws(exp, new TokenError('Token expired')))
 
     })
   })

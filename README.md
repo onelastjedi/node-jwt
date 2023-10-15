@@ -58,9 +58,7 @@ const data = jwt.verify(token, secret)
 
 ## Errors
 
-`TokenExpiredError`: if the token is expired.
-
-`SignatureInvalidError`: if the signature is invalid.
+`TokenError`: token is expired or signature is invalid.
 
 ## Algorithms supported
 
