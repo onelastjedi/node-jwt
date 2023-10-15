@@ -98,11 +98,11 @@ function sign ({ exp, ...rest }, secret, alg = 'HS256') {
   var head = getHead(alg),
       body = encode(
 
-        {
+  {
 
-        ...rest,
+    ...rest,
 
-            iat: now(Date),
+              iat: now(Date),
 
 
                       ...( exp
@@ -118,11 +118,10 @@ function sign ({ exp, ...rest }, secret, alg = 'HS256') {
 
 
       ),
+                                              signer = getSigner(alg)(secret)
 
-                                      signer = getSigner(alg)(secret)
 
-
-    ; return `${head}.${body}.${signer(head + '.' + body)}`
+    ;     return `${head}.${body}.${signer(head + '.' + body)}`
 }
 
 /**
