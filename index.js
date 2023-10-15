@@ -24,7 +24,7 @@
 var crypto = require('node:crypto')
 
 /*
- * Some usefull helpers
+ * Let's start from helpers
  *
  *
  */ // replace :: Regex -> String
@@ -93,17 +93,36 @@ var getHead = alg => encode({
  *    sign({ foo: "bar" }, 'secret') -> eyJhbGc.....
  *    sign({ foo: "bar" }, 'secret', 'HS512') -> eyJhbGc.....
  */
-function sign (body, secret, alg = 'HS256') {
-  Object.hasOwn(body, 'exp')
-    && (body.exp = after(body.exp))
-  ;
+function sign ({ exp, ...rest }, secret, alg = 'HS256') {
 
   var head = getHead(alg),
-      body = encode({ ...body, iat: now(Date) }),
-      signer = getSigner(alg)(secret)
-    ;
+      body = encode(
 
-  return `${head}.${body}.${signer(head + '.' + body)}`
+        {
+
+        ...rest,
+
+            iat: now(Date),
+
+
+                      ...( exp
+
+
+                             &&
+
+                                  {
+
+                                     exp: after(exp) })
+
+                }
+
+
+      ),
+
+                                      signer = getSigner(alg)(secret)
+
+
+    ; return `${head}.${body}.${signer(head + '.' + body)}`
 }
 
 /**
