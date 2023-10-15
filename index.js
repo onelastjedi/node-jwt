@@ -57,6 +57,13 @@ var replace = (re, rep) => x => x.replace(re, rep),
     parse = JSON.parse
   ;
 
+/* Custom error */
+class TokenError extends Error {
+  constructor (s) {
+    super(s)
+    this.name = this.constructor.name }
+}
+
 /* HMAC sha256 base64 signer */
 var hs_b64 = algo => secret => x =>
   crypto
@@ -146,8 +153,8 @@ function verify (token, secret) {
       expired = decode(body).exp <= now(Date)
     ;
 
-  if (invalid) throw new Error('Invalid signature')
-  if (expired) throw new Error('Token expired')
+  if (invalid) throw new TokenError('Invalid signature')
+  if (expired) throw new TokenError('Token expired')
 
   return {
     ...decode(body)
