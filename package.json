@@ -1,6 +1,6 @@
 {
   "name": "@onelastjedi/node-jwt",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Sign and verify JSON Web Tokens in it's simplest form",
   "homepage": "https://phon.one/node-jwt",
   "repository": {
@@ -20,12 +20,10 @@
     "name": "J.D",
     "url": "https://phon.one"
   },
-  "main": "src/index.js",
+  "main": "index.min.js",
   "scripts": {
+    "build": "esbuild index.js --bundle --platform=node --minify --analyze --outfile=index.min.js",
     "test": "mocha"
-  },
-  "devDependencies": {
-    "mocha": "^10.2.0"
   },
   "engines": {
     "node": ">=12"

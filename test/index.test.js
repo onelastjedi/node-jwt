@@ -64,7 +64,7 @@ describe('Library is a object which exports:', () => {
 
     describe(`'verify' return errors:`, () => {
       const invalid = () => lib.verify(token, 'secre')
-      const expired = lib.sign({ exp: 0 }, secret)
+      const expired = lib.sign({ exp: -1 }, secret)
       const exp = () => lib.verify(expired, secret)
 
       it('for invalid signature', () =>
