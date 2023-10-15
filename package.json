@@ -20,12 +20,10 @@
     "name": "J.D",
     "url": "https://phon.one"
   },
-  "main": "src/index.js",
+  "main": "index.min.js",
   "scripts": {
+    "build": "esbuild index.js --bundle --platform=node --minify --analyze --outfile=index.min.js",
     "test": "mocha"
-  },
-  "devDependencies": {
-    "mocha": "^10.2.0"
   },
   "engines": {
     "node": ">=12"
