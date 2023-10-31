@@ -1,6 +1,6 @@
 {
   "name": "@onelastjedi/node-jwt",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Sign and verify JSON Web Tokens in it's simplest form",
   "homepage": "https://phon.one/node-jwt",
   "repository": {
@@ -27,8 +27,5 @@
   },
   "engines": {
     "node": ">=12"
-  },
-  "dependencies": {
-    "jsonwebtoken": "^9.0.2"
   }
 }
