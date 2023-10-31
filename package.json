@@ -17,7 +17,7 @@
   ],
   "license": "AGPL",
   "author": {
-    "name": "J.D",
+    "name": "J.D <jd@phon.one>",
     "url": "https://phon.one"
   },
   "main": "index.min.js",
