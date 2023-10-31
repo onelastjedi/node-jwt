@@ -1,5 +1,5 @@
 const assert = require('assert')
-const lib = require('../index.js')
+const lib = require('../index.min.js')
 const secret = 'secret'
 const data = { foo: 'bar' }
 const token = lib.sign(data, secret)
@@ -11,11 +11,10 @@ class TokenError extends Error {
     {
       super(s)
       this.name = 'TokenError'
-
           }
     }
 
-describe('Uncompressed. Library supports:', () => {
+describe('Compressed. Library supports:', () => {
   const hs256 = lib.sign(data, secret, 'HS256')
   const hs384 = lib.sign(data, secret, 'HS384')
   const hs512 = lib.sign(data, secret, 'HS512')

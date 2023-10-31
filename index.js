@@ -27,7 +27,7 @@ var crypto = require('node:crypto')
  * Let's start from helpers
  *
  *
- */ // replace :: Regex -> String
+ *  // replace :: Regex -> String */
 var replace = (re, rep) => x => x.replace(re, rep),
     rePad = replace(/=/g, ''),
 
@@ -59,9 +59,9 @@ var replace = (re, rep) => x => x.replace(re, rep),
 
 /* Custom error */
 class TokenError extends Error {
-  constructor (s) {
-    super(s)
-    this.name = this.constructor.name }
+  constructor (message) {
+    super(message)
+    this.name = 'TokenError' }
 }
 
 /* HMAC sha256 base64 signer */
@@ -72,7 +72,7 @@ var hs_b64 = algo => secret => x =>
   ;
 
 /* Signer picker */
-var getSigner = alg => {
+var makeSigner = alg => {
   var [head, tail] = slicer(alg)
 
   return {
@@ -81,7 +81,7 @@ var getSigner = alg => {
 }
 
 /* Head generator */
-var getHead = alg => encode({
+var makeHead = alg => encode({
     alg: alg,
     typ: 'JWT'
   })
@@ -101,34 +101,18 @@ var getHead = alg => encode({
  *    sign({ foo: "bar" }, 'secret', 'HS512') -> eyJhbGc.....
  */
 function sign ({ exp, ...rest }, secret, alg = 'HS256') {
+  var head = makeHead(alg),
 
-  var head = getHead(alg),
-      body = encode(
+      body = encode({
+        ...rest,
+        iat: now(Date),
+        ...( exp && { exp: after(exp) })
+      }),
 
-  {
+      signer = makeSigner(alg)(secret)
+    ;
 
-    ...rest,
-
-              iat: now(Date),
-
-
-                      ...( exp
-
-
-                             &&
-
-                                  {
-
-                                     exp: after(exp) })
-
-                }
-
-
-      ),
-                                              signer = getSigner(alg)(secret)
-
-
-    ;     return `${head}.${body}.${signer(head + '.' + body)}`
+  return `${head}.${body}.${signer(head + '.' + body)}`
 }
 
 /**
@@ -146,7 +130,7 @@ function sign ({ exp, ...rest }, secret, alg = 'HS256') {
 function verify (token, secret) {
   var [head, body, tail] = splitDot(token),
       { alg } = decode(head),
-      signer = getSigner(alg)(secret)
+      signer = makeSigner(alg)(secret)
     ;
 
   var invalid = tail !== signer(head + '.' + body),
